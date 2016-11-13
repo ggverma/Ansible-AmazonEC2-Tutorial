@@ -1,0 +1,52 @@
+---
+- hosts: all
+  remote_user: root
+  become: yes
+  tasks:
+    - name: Installing nodejs
+      remote_user: root
+      apt:
+        name: nodejs
+        update_cache: yes
+
+    - name: Installing npm
+      apt:
+        name: npm
+        update_cache: yes
+
+    - name: Changing symlinks
+      file:
+        src: /usr/bin/nodejs
+        dest: /usr/bin/node
+        state: link
+      ignore_errors: yes
+
+    - name: Installing forever using npm
+      npm:
+        name: forever
+        global: yes
+        state: present
+        registry: 'http://r.cnpmjs.org/'
+
+    - name: Installing packages using npm
+      npm:
+        name: packages
+        global: yes
+        state: present
+        registry: 'http://r.cnpmjs.org/'
+
+    - name: Installing git
+      apt:
+        name: git
+        update_cache: yes
+
+    - name: Cloning git repo at 'https://github.com/CSC-DevOps/App'
+      git:
+        dest: ./CSC-DevOps
+        repo: 'https://github.com/CSC-DevOps/App'
+
+    - name: Installing express npm module
+      npm:
+        name: express
+        path: /home/ubuntu/CSC-DevOps
+        registry: 'http://r.cnpmjs.org/'

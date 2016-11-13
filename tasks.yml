@@ -1,0 +1,47 @@
+---
+- hosts: all
+  remote_user: ubuntu
+
+  tasks:
+    - name: Checking running apps.
+      command: forever list
+      register: fl1
+
+    - name: Running app CSC-DevOps/main.js
+      command: forever start ./CSC-DevOps/main.js
+      when: 'fl1.stdout.find("CSC-DevOps/main.js") == -1'
+
+    - name: Again checking running apps.
+      command: forever list
+      register: fl2
+
+    - debug:
+        msg: "Output of forever list before running app:\n{{fl1.stdout}}"
+
+    - debug:
+        msg: "Output of forever list after running app:\n{{fl2.stdout}}"
+
+    - name: Ensuring bash version
+      apt:
+        name: bash
+        state: latest
+
+    - name: Ensuring openssl version
+      apt:
+        name: openssl
+        state: latest
+
+    - name: Ensuring openssh-client version
+      apt:
+        name: openssh-client
+        state: latest
+
+    - name: Ensuring openssh-server version
+      apt:
+        name: openssh-server
+        state: latest
+
+    - name: Removing /tmp/*
+      file:
+        path: /tmp/*
+        state: absent
