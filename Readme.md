@@ -23,7 +23,7 @@ It has the following syntax:
 node0 ansible_ssh_host=<your host's IP address> ansible_ssh_user=ubuntu ansible_ssh_private_key_file=./keys/node0.key
 ```
 
-where node0 is the name of the host;
+      where node0 is the name of the host;
 
       ansible_ssh_host is the Public IP address of the host;
 
